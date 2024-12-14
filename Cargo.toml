@@ -1,0 +1,34 @@
+[package]
+name = "shinmy_installer"
+version = "1.0.2"
+edition = "2021"
+
+[profile.release]
+lto = true
+
+[dependencies]
+pelite = "0.10"
+include-bytes-zstd = { version = "0.1", optional = true }
+
+[dependencies.windows]
+version = "0.57"
+features = [
+    "Win32_System_LibraryLoader",
+    "Win32_System_Com",
+    "Win32_UI_WindowsAndMessaging",
+    "Win32_UI_Shell",
+    "Win32_UI_Input_KeyboardAndMouse",
+    "Win32_System_Diagnostics_ToolHelp"
+]
+
+[build-dependencies]
+embed-resource = "2.4"
+pelite = "0.10"
+cc = "1.1"
+
+[patch.crates-io]
+embed-resource = { git = "https://github.com/nabijaczleweli/rust-embed-resource.git", rev = "e98e9aa28d66b0c2ff43516b41847cac372310dd" }
+
+[features]
+default = ["compress_dll"]
+compress_dll = ["dep:include-bytes-zstd"]
