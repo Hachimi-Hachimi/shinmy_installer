@@ -100,6 +100,7 @@ impl Installer {
 
     pub fn install(&self) -> Result<(), Error> {
         let path = self.get_current_target_path().ok_or(Error::NoInstallDir)?;
+        unsafe { _ = utils::kill_shinmy_processes(); }
         let mut file = File::create(&path)?;
 
         #[cfg(feature = "compress_dll")]
@@ -113,6 +114,7 @@ impl Installer {
 
     pub fn uninstall(&self) -> Result<(), Error> {
         let path = self.get_current_target_path().ok_or(Error::NoInstallDir)?;
+        unsafe { _ = utils::kill_shinmy_processes(); }
         std::fs::remove_file(&path)?;
         Ok(())
     }
