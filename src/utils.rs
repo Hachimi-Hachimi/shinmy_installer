@@ -72,26 +72,6 @@ pub fn open_select_folder_dialog<P: AsRef<Path>>(owner: HWND, default_folder: Op
     Some(path_str.into())
 }
 
-pub fn is_game_running() -> bool {
-    let Ok(snapshot) = (unsafe { CreateToolhelp32Snapshot(TH32CS_SNAPALL, 0) }) else {
-        return false;
-    };
-    let mut entry = PROCESSENTRY32::default();
-    entry.dwSize = std::mem::size_of::<PROCESSENTRY32>() as u32;
-    let mut res = unsafe { Process32First(snapshot, &mut entry) };
-
-    while res.is_ok() {
-        let process_name = unsafe { CStr::from_ptr(entry.szExeFile.as_ptr()) };
-        if process_name == c"umamusume.exe" {
-            return true;
-        }
-
-        res = unsafe { Process32Next(snapshot, &mut entry) };
-    }
-
-    false
-}
-
 pub unsafe fn kill_shinmy_processes() -> Result<(), windows::core::Error> {
     let snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPALL, 0)?;
     let mut entry = PROCESSENTRY32::default();
